@@ -26,8 +26,7 @@ for packet in capture:
 
 capture.close()
 
-print(len(domainNameList))
-print(sorted(domainNameList))
+print(domainNameList)
 
 plt.bar(range(len(protocol_stats)), list(protocol_stats.values()), align='center')
 plt.xticks(range(len(protocol_stats)), list(protocol_stats.keys()))
