@@ -2,7 +2,7 @@ import pyshark
 import matplotlib.pyplot as plt
 plt.matplotlib.use('TkAgg')
 
-path = 'Traces/SameWifi/SameWifi_Messages_Send_and_Recieve.pcapng'
+path = 'Traces/DifferentWIfi/Messages_Send_and_Recieve.pcapng'
 capture = pyshark.FileCapture(path)
 
 protocol_stats = {}
@@ -14,10 +14,15 @@ for packet in capture:
     for protocol in protocols:
         if 'DNS' in packet:
             domainNameList.add(packet.dns.qry_name)
-        if protocol in protocol_stats:
-            protocol_stats[protocol] += 1
-        else:
-            protocol_stats[protocol] = 1
+
+for packet in capture:
+    protocol = packet.transport_layer
+    if protocol is None:
+        protocol = packet.highest_layer
+    if protocol in protocol_stats:
+        protocol_stats[protocol] += 1
+    else:
+        protocol_stats[protocol] = 1
 
 capture.close()
 
@@ -29,5 +34,5 @@ plt.xticks(range(len(protocol_stats)), list(protocol_stats.keys()))
 plt.xlabel('Protocoles')
 plt.ylabel('Nombre de paquets')
 imageName = './Graphs/' + path + '.png'
-plt.savefig(imageName.replace('.pcapng', '').replace('Traces/DifferentWifi/', '').replace('Traces/SameWifi/', ''))
+plt.savefig(imageName.replace('.pcapng', '').replace('Traces/DifferentWIfi/', '').replace('Traces/SameWifi/', ''))
 plt.show()
